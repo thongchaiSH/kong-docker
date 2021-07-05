@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)https://i.dont.works/kong-api-gateway-in-10-minute/ -->
+<html lang="en" style="transform: none;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kong API Gateway ฉบับรวบรัด</title>
+    <link rel="stylesheet" href="./Kong API Gateway ฉบับรวบรัด_files/screen.css">
+    <link rel="stylesheet" href="./Kong API Gateway ฉบับรวบรัด_files/css">
+
+    <link rel="icon" href="https://i.dont.works/favicon.png" type="image/png">
+    <link rel="canonical" href="https://i.dont.works/kong-api-gateway-in-10-minute/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="ทดลองเป็นโปรแกรมเมอร์ (หื่น)">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Kong API Gateway ฉบับรวบรัด">
+    <meta property="og:description" content="หลายๆคน ที่ผ่านมาอ่านบล็อกนี้ ผมคิดว่า น่าจะเคยอ่านบล็อกนี้ &quot;ชีวิตดีเพราะมี Kong ช่วยทำ API Gateway&quot; ซึ่งเขียนไว้ได้ดีมาก เห็นภาพรวม และการใช้งาน Kong ได้อย่างเข้าใจง่าย ผมแนะนำให้อ่านประกอบกับบล็อกนี้ไปด้วย ในบล็อกนี้ ผมจะมาสรุปสั้นๆ">
+    <meta property="og:url" content="https://i.dont.works/kong-api-gateway-in-10-minute/">
+    <meta property="og:image" content="https://i.dont.works/content/images/2019/06/IMG_20190615_185042.jpg">
+    <meta property="article:published_time" content="2019-06-15T12:09:47.000Z">
+    <meta property="article:modified_time" content="2019-06-16T09:41:23.000Z">
+    <meta property="article:tag" content="kong">
+    <meta property="article:tag" content="api">
+    <meta property="article:tag" content="Nginx">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/code.hard.fap.harder">
+    <meta property="article:author" content="https://www.facebook.com/koonnarate">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Kong API Gateway ฉบับรวบรัด">
+    <meta name="twitter:description" content="หลายๆคน ที่ผ่านมาอ่านบล็อกนี้ ผมคิดว่า น่าจะเคยอ่านบล็อกนี้ &quot;ชีวิตดีเพราะมี Kong ช่วยทำ API Gateway&quot; ซึ่งเขียนไว้ได้ดีมาก เห็นภาพรวม และการใช้งาน Kong ได้อย่างเข้าใจง่าย ผมแนะนำให้อ่านประกอบกับบล็อกนี้ไปด้วย ในบล็อกนี้ ผมจะมาสรุปสั้นๆ">
+    <meta name="twitter:url" content="https://i.dont.works/kong-api-gateway-in-10-minute/">
+    <meta name="twitter:image" content="https://i.dont.works/content/images/2019/06/kong-api-gateway-1.png">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="นเรศ เก็จรัมย์">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="kong, api, Nginx">
+    <meta property="og:image:width" content="2000">
+    <meta property="og:image:height" content="1540">
+    
+    <script src="./Kong API Gateway ฉบับรวบรัด_files/sdk.js" async="" crossorigin="anonymous"></script><script async="" src="./Kong API Gateway ฉบับรวบรัด_files/analytics.js"></script><script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "ทดลองเป็นโปรแกรมเมอร์ (หื่น)",
+        "url": "https://i.dont.works/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://i.dont.works/content/images/2019/07/e-narate-me-favicon-1.png",
+            "width": 60,
+            "height": 60
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "นเรศ เก็จรัมย์",
+        "image": {
+            "@type": "ImageObject",
+            "url": "//www.gravatar.com/avatar/d19bf157763983ec3036cf25590321d4?s=250&d=mm&r=x",
+            "width": 250,
+            "height": 250
+        },
+        "url": "https://i.dont.works/author/narate/",
+        "sameAs": [
+            "https://www.facebook.com/koonnarate"
+        ]
+    },
+    "headline": "Kong API Gateway ฉบับรวบรัด",
+    "url": "https://i.dont.works/kong-api-gateway-in-10-minute/",
+    "datePublished": "2019-06-15T12:09:47.000Z",
+    "dateModified": "2019-06-16T09:41:23.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://i.dont.works/content/images/2019/06/kong-api-gateway-1.png",
+        "width": 1020,
+        "height": 330
+    },
+    "keywords": "kong, api, Nginx",
+    "description": "หลายๆคน ที่ผ่านมาอ่านบล็อกนี้ ผมคิดว่า น่าจะเคยอ่านบล็อกนี้ &quot;ชีวิตดีเพราะมี\nKong\nช่วยทำ API Gateway&quot;\n[https://blog.nextzy.me/%E0%B8%8A%E0%B8%B5%E0%B8%A7%E0%B8%B4%E0%B8%95%E0%B8%94%E0%B8%B5%E0%B9%80%E0%B8%9E%E0%B8%A3%E0%B8%B2%E0%B8%B0%E0%B8%A1%E0%B8%B5-kong-%E0%B8%8A%E0%B9%88%E0%B8%A7%E0%B8%A2%E0%B8%97%E0%B8%B3-api-gateway-64816a103bb4] \nซึ่งเขียนไว้ได้ดีมาก เห็นภาพรวม และการใช้งาน Kong ได้อย่างเข้าใจง่าย\nผมแนะนำให้อ่านประกอบกับบล็อกนี้ไปด้วย\n\nในบล็อกนี้ ผมจะมาสรุปสั้นๆ เพื่อให้เห็นภาพว่า Kong คื",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://i.dont.works/"
+    }
+}
+    </script>
+
+    <meta name="generator" content="Ghost 3.40">
+    <link rel="alternate" type="application/rss+xml" title="ทดลองเป็นโปรแกรมเมอร์ (หื่น)" href="https://i.dont.works/rss/">
+    <meta property="article:author" content="https://www.facebook.com/koonnarate">
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-105589805-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<link rel="stylesheet" href="./Kong API Gateway ฉบับรวบรัด_files/railscasts.min.css">  
+<script src="./Kong API Gateway ฉบับรวบรัด_files/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>  
+<style>  
+	  pre {
+	    word-wrap: normal;
+	    -moz-hyphens: none;
+	    -ms-hyphens: none;
+	    -webkit-hyphens: none;
+    	hyphens: none;
+	    font-size: 0.7em;
+    	line-height: 1.3em;
+  	}
+	pre code, pre tt {
+		white-space: pre;
+  	}
+	.showyourterms {
+        width: 100%;
+    }
+	.showyourterms .command:before {
+    	content: "$ ";
+	}
+</style>
+<script>
+    // Web Ring
+    function addRingLogo() {
+        var a = document.createElement("A");
+        a.href = "https://webring.wonderful.software/#/dont.works";
+        a.title = "วงแหวนเว็บ";
+        a.setAttribute("class","logo");
+
+        var img = document.createElement("img");
+        img.setAttribute("class","logo-image");
+        img.src = "https://webring.wonderful.software/webring.black.svg";
+        img.width = 32;
+        img.height = 32;
+        img.alt = "วงแหวนเว็บ";
+        a.appendChild(img);
+        document.getElementsByTagName("DIV")[2].append(a);
+    }
+	window.addEventListener('DOMContentLoaded', addRingLogo);
+</script>
+<script type="text/javascript" src="./Kong API Gateway ฉบับรวบรัด_files/show-your-terms.min.js"></script>
+<link rel="stylesheet" href="./Kong API Gateway ฉบับรวบรัด_files/show-your-terms.min.css">
+<style>.theiaStickySidebar:after {content: ""; display: table; clear: both;}</style><style id="fit-vids-style">.fluid-width-video-wrapper{width:100%;position:relative;padding:0;}.fluid-width-video-wrapper iframe,.fluid-width-video-wrapper object,.fluid-width-video-wrapper embed {position:absolute;top:0;left:0;width:100%;height:100%;}</style><style type="text/css" data-fbcssmodules="css:fb.css.base css:fb.css.dialog css:fb.css.iframewidget css:fb.css.customer_chat_plugin_iframe">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_dialog_advanced{border-radius:8px;padding:10px}.fb_dialog_content{background:#fff;color:#373737}.fb_dialog_close_icon{background:url(https://z-p3-static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{left:5px;right:auto;top:5px}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://z-p3-static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent}.fb_dialog_close_icon:active{background:url(https://z-p3-static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:14px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://z-p3-static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{height:100%;left:0;margin:0;overflow:visible;position:absolute;top:-10000px;transform:none;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://z-p3-static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{background:none;height:auto;min-height:initial;min-width:initial;width:auto}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{clear:both;color:#fff;display:block;font-size:18px;padding-top:20px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .4);bottom:0;left:0;min-height:100%;position:absolute;right:0;top:0;width:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_mobile .fb_dialog_iframe{position:sticky;top:0}.fb_dialog_content .dialog_header{background:linear-gradient(from(#738aba), to(#2c4987));border-bottom:1px solid;border-color:#043b87;box-shadow:white 0 1px 1px -1px inset;color:#fff;font:bold 14px Helvetica, sans-serif;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:12px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:12px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:linear-gradient(from(#4267B2), to(#2a4887));background-clip:padding-box;border:1px solid #29487d;border-radius:3px;display:inline-block;line-height:18px;margin-top:3px;max-width:85px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{background:none;border:none;color:#fff;font:bold 12px Helvetica, sans-serif;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:16px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://z-p3-static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #4a4a4a;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f5f6f7;border:1px solid #4a4a4a;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://z-p3-static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-position:50% 50%;background-repeat:no-repeat;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}
+.fb_mpn_mobile_landing_page_slide_out{animation-duration:200ms;animation-name:fb_mpn_landing_page_slide_out;transition-timing-function:ease-in}.fb_mpn_mobile_landing_page_slide_out_from_left{animation-duration:200ms;animation-name:fb_mpn_landing_page_slide_out_from_left;transition-timing-function:ease-in}.fb_mpn_mobile_landing_page_slide_up{animation-duration:500ms;animation-name:fb_mpn_landing_page_slide_up;transition-timing-function:ease-in}.fb_mpn_mobile_bounce_in{animation-duration:300ms;animation-name:fb_mpn_bounce_in;transition-timing-function:ease-in}.fb_mpn_mobile_bounce_out{animation-duration:300ms;animation-name:fb_mpn_bounce_out;transition-timing-function:ease-in}.fb_mpn_mobile_bounce_out_v2{animation-duration:300ms;animation-name:fb_mpn_fade_out;transition-timing-function:ease-in}.fb_customer_chat_bounce_in_v2{animation-duration:300ms;animation-name:fb_bounce_in_v2;transition-timing-function:ease-in}.fb_customer_chat_bounce_in_from_left{animation-duration:300ms;animation-name:fb_bounce_in_from_left;transition-timing-function:ease-in}.fb_customer_chat_bounce_out_v2{animation-duration:300ms;animation-name:fb_bounce_out_v2;transition-timing-function:ease-in}.fb_customer_chat_bounce_out_from_left{animation-duration:300ms;animation-name:fb_bounce_out_from_left;transition-timing-function:ease-in}.fb_customer_chat_bubble_animated_no_badge{box-shadow:0 3px 12px rgba(0, 0, 0, .15);transition:box-shadow 150ms linear}.fb_customer_chat_bubble_animated_no_badge:hover{box-shadow:0 5px 24px rgba(0, 0, 0, .3)}.fb_customer_chat_bubble_animated_with_badge{box-shadow:-5px 4px 14px rgba(0, 0, 0, .15);transition:box-shadow 150ms linear}.fb_customer_chat_bubble_animated_with_badge:hover{box-shadow:-5px 8px 24px rgba(0, 0, 0, .2)}.fb_invisible_flow{display:inherit;height:0;overflow-x:hidden;width:0}.fb_new_ui_mobile_overlay_active{overflow:hidden}@keyframes fb_mpn_landing_page_slide_in{0%{border-radius:50%;margin:0 24px;width:60px}40%{border-radius:18px}100%{margin:0 12px;width:100% - 24px}}@keyframes fb_mpn_landing_page_slide_in_from_left{0%{border-radius:50%;left:12px;margin:0 24px;width:60px}40%{border-radius:18px}100%{left:12px;margin:0 12px;width:100% - 24px}}@keyframes fb_mpn_landing_page_slide_out{0%{margin:0 12px;width:100% - 24px}60%{border-radius:18px}100%{border-radius:50%;margin:0 24px;width:60px}}@keyframes fb_mpn_landing_page_slide_out_from_left{0%{left:12px;width:100% - 24px}60%{border-radius:18px}100%{border-radius:50%;left:12px;width:60px}}@keyframes fb_mpn_landing_page_slide_up{0%{bottom:0;opacity:0}100%{bottom:24px;opacity:1}}@keyframes fb_mpn_bounce_in{0%{opacity:.5;top:100%}100%{opacity:1;top:0}}@keyframes fb_mpn_fade_out{0%{bottom:30px;opacity:1}100%{bottom:0;opacity:0}}@keyframes fb_mpn_bounce_out{0%{opacity:1;top:0}100%{opacity:.5;top:100%}}@keyframes fb_bounce_in_v2{0%{opacity:0;transform:scale(0, 0);transform-origin:bottom right}50%{transform:scale(1.03, 1.03);transform-origin:bottom right}100%{opacity:1;transform:scale(1, 1);transform-origin:bottom right}}@keyframes fb_bounce_in_from_left{0%{opacity:0;transform:scale(0, 0);transform-origin:bottom left}50%{transform:scale(1.03, 1.03);transform-origin:bottom left}100%{opacity:1;transform:scale(1, 1);transform-origin:bottom left}}@keyframes fb_bounce_out_v2{0%{opacity:1;transform:scale(1, 1);transform-origin:bottom right}100%{opacity:0;transform:scale(0, 0);transform-origin:bottom right}}@keyframes fb_bounce_out_from_left{0%{opacity:1;transform:scale(1, 1);transform-origin:bottom left}100%{opacity:0;transform:scale(0, 0);transform-origin:bottom left}}@keyframes fb_bounce_out_v2_mobile_chat_started{0%{opacity:1;top:0}100%{opacity:0;top:20px}}@keyframes fb_customer_chat_bubble_bounce_in_animation{0%{bottom:6pt;opacity:0;transform:scale(0, 0);transform-origin:center}70%{bottom:18pt;opacity:1;transform:scale(1.2, 1.2)}100%{transform:scale(1, 1)}}@keyframes slideInFromBottom{0%{opacity:.1;transform:translateY(100%)}100%{opacity:1;transform:translateY(0)}}@keyframes slideInFromBottomDelay{0%{opacity:0;transform:translateY(100%)}97%{opacity:0;transform:translateY(100%)}100%{opacity:1;transform:translateY(0)}}</style></head>
+
+<body class="post-template tag-kong tag-api tag-nginx" style="transform: none;">
+    <div class="site" style="transform: none;">
+        <header class="site-header">
+    <div class="navbar">
+        <div class="navbar-left">
+            <a class="logo" href="https://i.dont.works/">
+        <img class="logo-image" src="./Kong API Gateway ฉบับรวบรัด_files/e-narate-me-favicon-1.png" alt="ทดลองเป็นโปรแกรมเมอร์ (หื่น)">
+</a>        <a href="https://webring.wonderful.software/#/dont.works" title="วงแหวนเว็บ" class="logo"><img class="logo-image" src="./Kong API Gateway ฉบับรวบรัด_files/webring.black.svg" width="32" height="32" alt="วงแหวนเว็บ"></a></div>
+            <nav class="main-menu hidden-xs hidden-sm hidden-md">
+                <ul class="nav-list u-plain-list">
+        <li class="menu-item menu-item-home">
+            <a class="menu-item-link" href="https://i.dont.works/">Home</a>
+        </li>
+        <li class="menu-item menu-item-about">
+            <a class="menu-item-link" href="https://i.dont.works/about-me/">About</a>
+        </li>
+        <li class="menu-item menu-item-contact">
+            <a class="menu-item-link" href="https://i.dont.works/contact/">Contact</a>
+        </li>
+        <li class="menu-item menu-item-donate">
+            <a class="menu-item-link" href="https://i.dont.works/donate/">Donate</a>
+        </li>
+        <li class="menu-item menu-item-ring">
+            <a class="menu-item-link" href="https://webring.wonderful.software/#/dont.works">Ring</a>
+        </li>
+</ul>
+            </nav>
+        <div class="navbar-right">
+            <div class="social hidden-xs hidden-sm"></div>
+            <div class="burger hidden-lg hidden-xl">
+    <div class="burger-bar"></div>
+    <div class="burger-bar"></div>
+</div>        </div>
+    </div>
+</header>        <div class="site-content" style="transform: none;">
+            
+<div class="container" style="transform: none;">
+    <div class="row" style="transform: none;">
+        <div class="content-column col-lg-6">
+            <div class="content-area">
+                <main class="site-main">
+                        <article class="post tag-kong tag-api tag-nginx featured single u-shadow">
+                            <header class="post-header">
+            <a class="post-tag" href="https://i.dont.works/tag/kong/">kong</a>
+    <h1 class="post-title">
+            Kong API Gateway ฉบับรวบรัด
+    </h1>
+</header>                            <div class="post-meta">
+                                <time class="post-meta-date" datetime="2019-06-15">
+                                    Jun 15, 2019
+                                </time>
+                                <span class="post-meta-length">3 min read</span>
+                            </div>
+                                <div class="post-media">
+        <div class="u-placeholder">
+            <a class="post-image-link" href="https://i.dont.works/kong-api-gateway-in-10-minute/">
+                <img class="post-image lazyautosizes lazyloaded" data-srcset="/content/images/size/w400/2019/06/kong-api-gateway-1.png 400w, /content/images/size/w750/2019/06/kong-api-gateway-1.png 750w, /content/images/size/w960/2019/06/kong-api-gateway-1.png 960w" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-sizes="auto" alt="Kong API Gateway ฉบับรวบรัด" sizes="555px" srcset="/content/images/size/w400/2019/06/kong-api-gateway-1.png 400w, /content/images/size/w750/2019/06/kong-api-gateway-1.png 750w, /content/images/size/w960/2019/06/kong-api-gateway-1.png 960w">
+            </a>
+        </div>
+    </div>
+                            <div class="post-wrapper">
+                                <div class="post-content u-text-format">
+                                    <p>หลายๆคน ที่ผ่านมาอ่านบล็อกนี้ ผมคิดว่า น่าจะเคยอ่านบล็อกนี้ <a href="https://blog.nextzy.me/%E0%B8%8A%E0%B8%B5%E0%B8%A7%E0%B8%B4%E0%B8%95%E0%B8%94%E0%B8%B5%E0%B9%80%E0%B8%9E%E0%B8%A3%E0%B8%B2%E0%B8%B0%E0%B8%A1%E0%B8%B5-kong-%E0%B8%8A%E0%B9%88%E0%B8%A7%E0%B8%A2%E0%B8%97%E0%B8%B3-api-gateway-64816a103bb4">"ชีวิตดีเพราะมี Kong ช่วยทำ API Gateway"</a> ซึ่งเขียนไว้ได้ดีมาก เห็นภาพรวม และการใช้งาน Kong ได้อย่างเข้าใจง่าย ผมแนะนำให้อ่านประกอบกับบล็อกนี้ไปด้วย</p><p>ในบล็อกนี้ ผมจะมาสรุปสั้นๆ เพื่อให้เห็นภาพว่า Kong คืออะไร ทำอะไรได้บ้าง และจะใช้มันทำอะไร</p><figure class="kg-card kg-image-card"><img src="./Kong API Gateway ฉบับรวบรัด_files/1_wZjlH52hxVNRDp9cia5efQ.png" class="kg-image"></figure><p>จากภาพบน (ด้านซ้าย) แสดงให้เห็นว่า การทำ API แบบเก่าเวลาที่ API เริ่มเยอะขึ้น ฟังก์ชั่นหรือฟีเจอร์ที่ใช้ จะมีซ้ำๆกัน เช่น การ Authentication ก่อนการเรียกใช้ API, การ Limit Request สำหรับการเรียกใช้ API และอื่นๆ ซึ่งแต่ละ API อาจจะมาจากคนละทีมที่เขียนมา แล้วใช้ Reverse Proxy ในการ Route Request ไปยัง API ต่างๆด้านหลัง</p><p>ภาพด้านขวาคือ Kong API Gateway จะแสดงให้เห็นว่าจะยุบรวมฟีเจอร์หรือฟังก์ชั่น ที่มีการเรียกใช้งานร่วมกันของ API ต่างๆ ไปอยู่ที่ตัว Kong ทำให้ API ที่เขียนขึ้นมา ไม่ต้องเขียนฟังก์ชั่นเหล่านั้นเอง เช่น Authentication, Rate Limit, &nbsp;ACL และอื่นๆ</p><p>สิ่งที่ทำให้ Kong เป็น API Gateway ที่ได้รับความนิยมมากคือ</p><ul><li>ใช้ง่ายผ่าน RESTful API</li><li>Open Source</li><li>Scale ได้ง่าย</li><li>ประสิทธิภาพสูง</li><li>มี Plugin ให้ใช้</li></ul><h2 id="deploy-kong-2-">Deploy Kong &nbsp;ในเวลาน้อยกว่า 2 นาที!</h2><blockquote>ถ้าในเครื่องมี Docker, Docker Compose แล้วนะ :D</blockquote><pre><code class="hljs nginx"><span class="hljs-title">git</span> clone <span class="hljs-url">https://github.com/narate/kong-docker.git</span>
+git checkout pg
+time ./start.sh</code></pre><figure class="kg-card kg-image-card kg-card-hascaption"><img src="./Kong API Gateway ฉบับรวบรัด_files/Screen-Shot-2562-06-15-at-17.21.18.png" class="kg-image"><figcaption>ถ้าไม่มี docker image ในเครื่อง จะขึ้นอยู่กับความเร็วของอินเตอร์เน็ต</figcaption></figure><p>จากคำสั่งด้านบน จะได้ Kong API Gateway ที่พร้อมใช้งาน แต่ก่อนจะเริ่มใช้งาน Kong มาทำความเข้าใจพื้นฐานของ Kong ก่อน</p><p>หลังจากที่ Deploy Kong ไปแล้วจะได้ 2 Port ที่เปิดเพิ่มมา</p><ul><li>Kong Admin Port 8001</li><li>Kong Proxy Port 8000 (แต่ใน docker-compose map port ออกมาเป็น 80 ที่เครื่องโฮสต์)</li></ul><h3 id="kong-admin-port-8001">Kong Admin Port 8001</h3><p>Kong Admin Port ใช้สำหรับคอนฟิก Kong</p><h3 id="kong-proxy-port-8000">Kong Proxy Port 8000</h3><p>Kong Proxy Port ใช้สำหรับเป็นทางเข้า หรือให้เรียกไปยัง Service ด้านหลัง Kong</p><h3 id="object-kong">Object พื้นฐาน ที่ต้องใช้ใน Kong</h3><ul><li>Services</li><li>Routes</li></ul><h3 id="kong-services">Kong Services</h3><p>Kong Services คือ การประกาศไว้ว่า API หรือ Microservice ของเราอยู่ที่ไหน</p><h3 id="kong-routes">Kong Routes</h3><p>Kong Routes คือ ทางเข้าไปยัง Services ที่ประกาศไว้</p><h3 id="-service-">สร้าง Service แรก</h3><hr><p>ใช้ <code>cURL</code> ในการสร้าง Service ชื่อ <code>httpbin</code> โดยมี url ของ service เป็น <code>http://httpbin/org</code></p><pre><code class="hljs bash">curl <span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>:<span class="hljs-number">8001</span>/services <span class="hljs-operator">-d</span> <span class="hljs-string">'name=httpbin'</span> <span class="hljs-operator">-d</span> <span class="hljs-string">'url=http://httpbin.org'</span></code></pre><p>หลังจากรันคำสั่ง จะได้ Respose เป็น JSON กลับมา</p><pre><code class="language-json hljs">{
+  "<span class="hljs-attribute">host</span>": <span class="hljs-value"><span class="hljs-string">"httpbin.org"</span></span>,
+  "<span class="hljs-attribute">created_at</span>": <span class="hljs-value"><span class="hljs-number">1560595421</span></span>,
+  "<span class="hljs-attribute">connect_timeout</span>": <span class="hljs-value"><span class="hljs-number">60000</span></span>,
+  "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"02fd187e-7976-44ce-88a6-604a707cdc9a"</span></span>,
+  "<span class="hljs-attribute">protocol</span>": <span class="hljs-value"><span class="hljs-string">"http"</span></span>,
+  "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"httpbin"</span></span>,
+  "<span class="hljs-attribute">read_timeout</span>": <span class="hljs-value"><span class="hljs-number">60000</span></span>,
+  "<span class="hljs-attribute">port</span>": <span class="hljs-value"><span class="hljs-number">80</span></span>,
+  "<span class="hljs-attribute">path</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">updated_at</span>": <span class="hljs-value"><span class="hljs-number">1560595421</span></span>,
+  "<span class="hljs-attribute">retries</span>": <span class="hljs-value"><span class="hljs-number">5</span></span>,
+  "<span class="hljs-attribute">write_timeout</span>": <span class="hljs-value"><span class="hljs-number">60000</span></span>,
+  "<span class="hljs-attribute">tags</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+</span>}</code></pre><p>หลังจากที่สร้าง Service แล้ว จะยังเข้าถึง Service ไม่ได้ เพราะยังไม่มี Routes หรือทางเข้าไปยัง Services ถ้าเข้าไปยัง Proxy Port &nbsp;http://127.0.0.1/</p><pre><code class="hljs cpp">curl <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span></code></pre><p>จะได้ error</p><pre><code class="hljs json">{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"no Route matched with those values"</span>
+</span>}</code></pre><p>สร้าง Routes เพื่อให้เรียกหา Service ได้</p><pre><code class="hljs nginx"><span class="hljs-title">curl</span> <span class="hljs-number">127.0.0.1:8001</span>/services/httpbin/routes -d <span class="hljs-string">'paths[]=/'</span></code></pre><p>จะได้ JSON Response</p><pre><code class="hljs json">{
+  "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"4eaef1d0-b0e1-49d6-a160-81f9456933e7"</span></span>,
+  "<span class="hljs-attribute">tags</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">paths</span>": <span class="hljs-value">[
+    <span class="hljs-string">"/"</span>
+  ]</span>,
+  "<span class="hljs-attribute">destinations</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">protocols</span>": <span class="hljs-value">[
+    <span class="hljs-string">"http"</span>,
+    <span class="hljs-string">"https"</span>
+  ]</span>,
+  "<span class="hljs-attribute">created_at</span>": <span class="hljs-value"><span class="hljs-number">1560595643</span></span>,
+  "<span class="hljs-attribute">snis</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">hosts</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">preserve_host</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+  "<span class="hljs-attribute">regex_priority</span>": <span class="hljs-value"><span class="hljs-number">0</span></span>,
+  "<span class="hljs-attribute">strip_path</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+  "<span class="hljs-attribute">sources</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+  "<span class="hljs-attribute">updated_at</span>": <span class="hljs-value"><span class="hljs-number">1560595643</span></span>,
+  "<span class="hljs-attribute">https_redirect_status_code</span>": <span class="hljs-value"><span class="hljs-number">426</span></span>,
+  "<span class="hljs-attribute">service</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"02fd187e-7976-44ce-88a6-604a707cdc9a"</span>
+  </span>}</span>,
+  "<span class="hljs-attribute">methods</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+</span>}</code></pre><p>ถ้าเรียกหน้าเว็บ http://127.0.0.1 จะได้หน้าเว็บเดียวกับ &nbsp;http://httpbin.org</p><figure class="kg-card kg-image-card"><img src="./Kong API Gateway ฉบับรวบรัด_files/Screen-Shot-2562-06-15-at-17.49.37.png" class="kg-image"></figure><p>หรือว่าทดลองเรียกใช้ด้วย <code>cURL</code> เพื่อเช็ค IP ของเครื่องเรา</p><pre><code class="hljs cpp">curl <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>/ip</code></pre><p>จะได้ IP ของเครื่องเรา</p><pre><code class="hljs json">{
+  "<span class="hljs-attribute">origin</span>": <span class="hljs-value"><span class="hljs-string">"192.168.32.99, 184.22.153.99, 192.168.32.99"</span>
+</span>}</code></pre><p>จะเห็นว่า เราสามารถสร้าง API Gateway ได้ใน 2 คำสั่ง ซึ่งใช้เวลาในไม่กี่นาที เราก็ได้ API Gateway ที่เรียกไปยัง Microservice ข้างหลังได้ ถ้าจะเพิ่ม Services, Routes ใหม่ ก็จะเพิ่มได้ในไม่กี่นาที</p><h2 id="konga-kong-admin-gui-dashboard">Konga Kong Admin GUI Dashboard</h2><p>Kong ไม่ได้ให้ระบบ Admin GUI Dashboard มาให้ในเวอร์ชั่น CE หรือ Community Edition แต่ก็มีคนสร้าง Admin GUI Dashboard เวอร์ชั่น Open source มาให้ใช้ <a href="https://github.com/pantsel/konga">https://github.com/pantsel/konga</a></p><p>ในไฟล์ docker-compose ที่ clone ลงมา จะมี service ให้อยู่แล้ว แต่ยังไม่ได้รันขึ้นมา ต้องรันขึ้นมาก่อน โดยต้องรัน 2 service คือ mongo, konga</p><pre><code class="hljs bash">docker-compose up <span class="hljs-operator">-d</span> mongo konga</code></pre><p>หลังจาก run เสร็จแล้ว konga จะรันอยู่ที่ Port 1337 การเข้าใช้งานครั้งแรก จะต้องสร้าง username/password ก่อนเข้าใช้งาน</p><figure class="kg-card kg-image-card"><img src="./Kong API Gateway ฉบับรวบรัด_files/Screen-Shot-2562-06-15-at-18.14.13.png" class="kg-image"></figure><p>หลังจากที่สร้าง username/password แล้ว และ Login เข้าไปในระบบของ Konga จะได้หน้าให้ config admin url</p><figure class="kg-card kg-image-card"><img src="./Kong API Gateway ฉบับรวบรัด_files/Screen-Shot-2562-06-15-at-18.17.09.png" class="kg-image"></figure><ul><li>Name ตั้งชื่ออะไรก็ได้</li><li>Kong Admin URL ให้ใช้ <code>http://kong:8001/</code> เพราะรันอยู่ใน docker-compose สามารถเรียกด้วยชื่อ service ใน docker-compose ได้</li></ul><p>จะได้หน้า Admin GUI</p><figure class="kg-card kg-image-card"><img src="./Kong API Gateway ฉบับรวบรัด_files/Screen-Shot-2562-06-15-at-18.19.51.png" class="kg-image"></figure><h2 id="kong-plugin">Kong Plugin</h2><p>สิ่งที่ทำให้ Kong มีความยืดหยุ่นคือ มีระบบ Plugin (แต่ ยังไม่มี plugin market) ตัวอย่าง คือ จะเพิ่มระบบ Authentication ให้กับ API ที่สร้างขึ้นมา โดยจะใช้ Basic Auth ที่ต้องใส่ username/password ก่อน ถึงจะสามารถเรียก API ได้</p><h3 id="-service">เมนู Service</h3><p>ในเมนู Service จะเห็นว่า มี Service ที่เราสร้างไว้ก่อนหน้านี้ผ่าน command line</p><figure class="kg-card kg-image-card"><img src="./Kong API Gateway ฉบับรวบรัด_files/Screen-Shot-2562-06-15-at-18.30.31.png" class="kg-image"></figure><p>กดเข้าไปใน <strong>httpbin</strong> จะเห็นรายละเอียดของ Service ที่สร้างไว้</p><figure class="kg-card kg-image-card"><img src="./Kong API Gateway ฉบับรวบรัด_files/Screen-Shot-2562-06-15-at-18.31.47.png" class="kg-image"></figure><p>จากนั้นให้ไปที่เมนู Plugins</p><figure class="kg-card kg-image-card"><img src="./Kong API Gateway ฉบับรวบรัด_files/Screen-Shot-2562-06-15-at-18.32.51.png" class="kg-image"></figure><p>กด Add Plugin ให้เลือก Basic Auth ไม่ต้องใส่ค่าอะไร</p><figure class="kg-card kg-image-card"><img src="./Kong API Gateway ฉบับรวบรัด_files/Screen-Shot-2562-06-15-at-18.42.36.png" class="kg-image"></figure><p>หลังจากที่เพิ่ม Plugin ไปแล้ว เวลาเรียกใช้ API จะต้องใส่ username/password</p><figure class="kg-card kg-image-card"><img src="./Kong API Gateway ฉบับรวบรัด_files/Screen-Shot-2562-06-15-at-18.43.23.png" class="kg-image"></figure><blockquote>แต่ เรายังไม่มี username/password</blockquote><h2 id="-kong-consumer">สร้าง Kong Consumer</h2><p>Consumer คือ คนที่จะมาเรียกใช้ API เวลาเรา Enable Plugin ที่เกี่ยวกับการ Authentication แล้ว จำเป็นที่จะต้องสร้าง Consumer ก่อน</p><p>ไปที่เมนู Consumers และสร้าง Consumer</p><figure class="kg-card kg-image-card"><img src="./Kong API Gateway ฉบับรวบรัด_files/Screen-Shot-2562-06-15-at-18.53.42.png" class="kg-image"></figure><p>จากนั้นสร้าง Credentials Basic Auth ให้กับ Consumer</p><figure class="kg-card kg-image-card"><img src="./Kong API Gateway ฉบับรวบรัด_files/Screen-Shot-2562-06-15-at-18.55.51.png" class="kg-image"></figure><p>หลังจากสร้าง Credentials แล้ว จะเข้าใช้เว็บหรือ API ได้</p><p></p><h2 id="-">จบ</h2><p></p><h2 id="--1">เดี๋ยวๆๆ ลืมขายของ</h2><p>ที่เขียนมาทั้งหมด สามารถหาอ่านได้จากที่อื่นๆได้ ไม่ได้เป็นเรื่องยากมากสำหรับ Dev/Sys Admin &nbsp;เท่าไหร่ แต่ สิ่งที่ Kong มีความยืดหยุ่นมากกว่านี้คือ เราสามารถที่จะเขียน Plugin ขึ้นมาได้เอง โดยใช้ภาษา Lua ที่เขียนอยู่บน OpenResty สำหรับบริษัทที่สนใจ อยากใช้ Kong ซึ่ง Kong มี 2 เวอร์ชั่นคือ EE (Enterprise Edition) และ CE (Community Edition) ทางบริษัท <a href="https://www.facebook.com/domecloud.io">DomeCloud</a> เป็น Partner กับ Kong Inc. ในการขาย Kong EE และนอกจากนี้ DomeCloud ยังรับ Implement Kong CE Plugin ด้วยติดต่อได้ทาง Fcebook page <a href="https://www.facebook.com/domecloud.io/inbox">DomeCloud</a></p><p></p>
+                                </div>
+                                    <div class="post-tags">
+        <a class="tag tag-kong" href="https://i.dont.works/tag/kong/" title="kong">kong</a><a class="tag tag-api" href="https://i.dont.works/tag/api/" title="api">api</a><a class="tag tag-nginx" href="https://i.dont.works/tag/nginx/" title="Nginx">Nginx</a>
+    </div>
+                                <div class="share u-hover-wrapper">
+    <a class="share-item share-facebook u-hover-item" href="https://www.facebook.com/sharer.php?u=https://i.dont.works/kong-api-gateway-in-10-minute/" target="_blank"><i class="icon icon-facebook"></i></a>
+    <a class="share-item share-twitter u-hover-item" href="https://twitter.com/intent/tweet?url=https://i.dont.works/kong-api-gateway-in-10-minute/&amp;text=Kong%20API%20Gateway%20%E0%B8%89%E0%B8%9A%E0%B8%B1%E0%B8%9A%E0%B8%A3%E0%B8%A7%E0%B8%9A%E0%B8%A3%E0%B8%B1%E0%B8%94" target="_blank"><i class="icon icon-twitter"></i></a>
+    <a class="share-item share-pinterest u-hover-item" href="https://pinterest.com/pin/create/button/?url=https://i.dont.works/kong-api-gateway-in-10-minute/&amp;media=&amp;description=Kong%20API%20Gateway%20%E0%B8%89%E0%B8%9A%E0%B8%B1%E0%B8%9A%E0%B8%A3%E0%B8%A7%E0%B8%9A%E0%B8%A3%E0%B8%B1%E0%B8%94" target="_blank"><i class="icon icon-pinterest"></i></a>
+    <a class="share-item share-linkedin u-hover-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://i.dont.works/kong-api-gateway-in-10-minute/&amp;title=Kong%20API%20Gateway%20%E0%B8%89%E0%B8%9A%E0%B8%B1%E0%B8%9A%E0%B8%A3%E0%B8%A7%E0%B8%9A%E0%B8%A3%E0%B8%B1%E0%B8%94" target="_blank"><i class="icon icon-linkedin"></i></a>
+    <a class="share-item share-reddit u-hover-item" href="https://reddit.com/submit?url=https://i.dont.works/kong-api-gateway-in-10-minute/&amp;title=Kong%20API%20Gateway%20%E0%B8%89%E0%B8%9A%E0%B8%B1%E0%B8%9A%E0%B8%A3%E0%B8%A7%E0%B8%9A%E0%B8%A3%E0%B8%B1%E0%B8%94" target="_blank"><i class="icon icon-reddit"></i></a>
+    <a class="share-item share-vk u-hover-item" href="https://vk.com/share.php?url=https://i.dont.works/kong-api-gateway-in-10-minute/&amp;title=Kong%20API%20Gateway%20%E0%B8%89%E0%B8%9A%E0%B8%B1%E0%B8%9A%E0%B8%A3%E0%B8%A7%E0%B8%9A%E0%B8%A3%E0%B8%B1%E0%B8%94" target="_blank"><i class="icon icon-vk"></i></a>
+</div>                            </div>
+                        </article>
+                            <section class="author u-shadow">
+        <div class="author-image-placeholder u-placeholder">
+            <img class="author-image u-object-fit lazyloaded" data-src="//www.gravatar.com/avatar/d19bf157763983ec3036cf25590321d4?s=250&amp;d=mm&amp;r=x" src="./Kong API Gateway ฉบับรวบรัด_files/d19bf157763983ec3036cf25590321d4.jpeg" alt="นเรศ เก็จรัมย์">
+        </div>
+        <div class="author-wrapper">
+            <header class="author-header">
+                <div class="author-header-wrapper">
+                    <h4 class="author-name">นเรศ เก็จรัมย์</h4>
+                    <div class="author-social">
+                            <a class="author-social-item author-facebook" href="https://www.facebook.com/koonnarate" target="_blank">Facebook</a>
+                        <a class="author-social-item author-more" href="https://i.dont.works/author/narate/">More posts</a>
+                    </div>
+                </div>
+            </header>
+            <div class="author-bio"></div>
+                <div class="author-location"><i class="author-location-icon icon icon-map-marker"></i>
+                    Bangkok, Thailand</div>
+        </div>
+    </section>
+                        <div class="navigation">
+        <div class="navigation-item navigation-previous">
+            <img class="navigation-image u-object-fit lazyautosizes lazyloaded" data-srcset="/content/images/size/w400/2018/09/Screen-Shot-2561-09-09-at-19.48.49.png 400w, /content/images/size/w750/2018/09/Screen-Shot-2561-09-09-at-19.48.49.png 750w, /content/images/size/w960/2018/09/Screen-Shot-2561-09-09-at-19.48.49.png 960w" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-sizes="auto" alt="มาลองใช้ GoTTY ส่ง Terminal ออกไปยัง Web Browser" sizes="274px" srcset="/content/images/size/w400/2018/09/Screen-Shot-2561-09-09-at-19.48.49.png 400w, /content/images/size/w750/2018/09/Screen-Shot-2561-09-09-at-19.48.49.png 750w, /content/images/size/w960/2018/09/Screen-Shot-2561-09-09-at-19.48.49.png 960w">
+            <span class="navigation-label">Previous Post</span>
+            <h4 class="navigation-title">มาลองใช้ GoTTY ส่ง Terminal ออกไปยัง Web Browser</h4>
+            <a class="u-permalink" href="https://i.dont.works/gotty/"></a>
+        </div>
+
+        <div class="navigation-item navigation-next">
+            <img class="navigation-image u-object-fit lazyautosizes lazyloaded" data-srcset="/content/images/size/w400/2019/07/IMG_20190707_205416-copy.jpg 400w, /content/images/size/w750/2019/07/IMG_20190707_205416-copy.jpg 750w, /content/images/size/w960/2019/07/IMG_20190707_205416-copy.jpg 960w" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-sizes="auto" alt="ใครไม่ดี KrakenD API Gateway" sizes="274px" srcset="/content/images/size/w400/2019/07/IMG_20190707_205416-copy.jpg 400w, /content/images/size/w750/2019/07/IMG_20190707_205416-copy.jpg 750w, /content/images/size/w960/2019/07/IMG_20190707_205416-copy.jpg 960w">
+            <span class="navigation-label">Next Post</span>
+            <h4 class="navigation-title">ใครไม่ดี KrakenD API Gateway</h4>
+            <a class="u-permalink" href="https://i.dont.works/basic-krakend-api-gateway/"></a>
+        </div>
+</div>                                        </main>
+            </div>
+        </div>
+        <div class="related-column col-lg-3 hidden-xs hidden-sm hidden-md" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+                    
+        <div class="theiaStickySidebar" style="padding-top: 1px; padding-bottom: 1px; position: static; transform: none; top: 0px; left: 70px;"><section class="related-posts">
+            <h3 class="related-title">
+                <span class="text">You might also like...</span>
+            </h3>
+            <div class="post-feed">
+                    <article class="post tag-tools tag-python tag-api tag-docs tag-ruby tag-javascript tag-yaml tag-markdown tag-nodejs featured u-shadow">
+        <img class="post-image u-object-fit lazyautosizes lazyloaded" data-src="https://images.unsplash.com/photo-1486303954368-398fea0e72cd?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;s=00d0e9cfad3ba3ec18cc8eba78044787" src="./Kong API Gateway ฉบับรวบรัด_files/photo-1486303954368-398fea0e72cd" data-sizes="auto" alt="รีวิว API Docฯ Genฯ แบบลวกๆ เร็วกว่าต้มมาม่า" sizes="263px">
+        <div class="post-media">
+        <div class="u-placeholder same-height rectangle">
+            <a class="post-image-link" href="https://i.dont.works/quick-review-api-docs-gen/">
+                <img class="post-image lazyload u-object-fit" data-srcset="https://images.unsplash.com/photo-1486303954368-398fea0e72cd?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;s=00d0e9cfad3ba3ec18cc8eba78044787 400w, https://images.unsplash.com/photo-1486303954368-398fea0e72cd?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;s=00d0e9cfad3ba3ec18cc8eba78044787 750w, https://images.unsplash.com/photo-1486303954368-398fea0e72cd?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;s=00d0e9cfad3ba3ec18cc8eba78044787 960w" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-sizes="auto" alt="รีวิว API Docฯ Genฯ แบบลวกๆ เร็วกว่าต้มมาม่า">
+            </a>
+        </div>
+    </div>
+    <div class="post-wrapper">
+        <header class="post-header">
+            <a class="post-tag" href="https://i.dont.works/tag/tools/">tools</a>
+    <h2 class="post-title">
+            <a class="post-title-link" href="https://i.dont.works/quick-review-api-docs-gen/">รีวิว API Docฯ Genฯ แบบลวกๆ เร็วกว่าต้มมาม่า</a>
+    </h2>
+</header>            <div class="post-excerpt">
+                สั้นๆ จบย่อหน้าเดียว ลูกพี่สั่ง ให้เขี
+            </div>
+    </div>
+    <footer class="post-footer">
+    <a class="post-link" href="https://i.dont.works/quick-review-api-docs-gen/">Read More</a>
+    <div class="post-author">
+                <a class="post-author-link" href="https://i.dont.works/author/narate/">
+                    <img class="post-author-image" src="./Kong API Gateway ฉบับรวบรัด_files/d19bf157763983ec3036cf25590321d4.jpeg" alt="นเรศ เก็จรัมย์">
+                </a>
+    </div>
+</footer></article>                    <article class="post tag-api-gateway tag-krakend tag-yaml tag-kong tag-docker u-shadow">
+        <div class="post-media">
+        <div class="u-placeholder same-height rectangle">
+            <a class="post-image-link" href="https://i.dont.works/basic-krakend-api-gateway/">
+                <img class="post-image u-object-fit lazyautosizes lazyloaded" data-srcset="/content/images/size/w400/2019/07/IMG_20190707_205416-copy.jpg 400w, /content/images/size/w750/2019/07/IMG_20190707_205416-copy.jpg 750w, /content/images/size/w960/2019/07/IMG_20190707_205416-copy.jpg 960w" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-sizes="auto" alt="ใครไม่ดี KrakenD API Gateway" sizes="263px" srcset="/content/images/size/w400/2019/07/IMG_20190707_205416-copy.jpg 400w, /content/images/size/w750/2019/07/IMG_20190707_205416-copy.jpg 750w, /content/images/size/w960/2019/07/IMG_20190707_205416-copy.jpg 960w">
+            </a>
+        </div>
+    </div>
+    <div class="post-wrapper">
+        <header class="post-header">
+            <a class="post-tag" href="https://i.dont.works/tag/api-gateway/">API Gateway</a>
+    <h2 class="post-title">
+            <a class="post-title-link" href="https://i.dont.works/basic-krakend-api-gateway/">ใครไม่ดี KrakenD API Gateway</a>
+    </h2>
+</header>            <div class="post-excerpt">
+                เมื่อสัก 2 วันก่อน ผมเห็น KrakenD จากน้องคนนึ
+            </div>
+    </div>
+    <footer class="post-footer">
+    <a class="post-link" href="https://i.dont.works/basic-krakend-api-gateway/">Read More</a>
+    <div class="post-author">
+                <a class="post-author-link" href="https://i.dont.works/author/narate/">
+                    <img class="post-author-image" src="./Kong API Gateway ฉบับรวบรัด_files/d19bf157763983ec3036cf25590321d4.jpeg" alt="นเรศ เก็จรัมย์">
+                </a>
+    </div>
+</footer></article>                    <article class="post tag-nginx tag-security tag-ssl tag-https u-shadow">
+        <div class="post-media">
+        <div class="u-placeholder same-height rectangle">
+            <a class="post-image-link" href="https://i.dont.works/nginx-mtls-example/">
+                <img class="post-image u-object-fit lazyautosizes lazyloaded" data-srcset="/content/images/size/w400/2019/09/handshake-1.gif 400w, /content/images/size/w750/2019/09/handshake-1.gif 750w, /content/images/size/w960/2019/09/handshake-1.gif 960w" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-sizes="auto" alt="ตัวอย่าง NGINX mutual authentication" sizes="263px" srcset="/content/images/size/w400/2019/09/handshake-1.gif 400w, /content/images/size/w750/2019/09/handshake-1.gif 750w, /content/images/size/w960/2019/09/handshake-1.gif 960w">
+            </a>
+        </div>
+    </div>
+    <div class="post-wrapper">
+        <header class="post-header">
+            <a class="post-tag" href="https://i.dont.works/tag/nginx/">Nginx</a>
+    <h2 class="post-title">
+            <a class="post-title-link" href="https://i.dont.works/nginx-mtls-example/">ตัวอย่าง NGINX mutual authentication</a>
+    </h2>
+</header>            <div class="post-excerpt">
+                การทำ &nbsp;Mutual authentication พูดง่ายๆคือ คนที่จะเรียกใช้เว็บ
+            </div>
+    </div>
+    <footer class="post-footer">
+    <a class="post-link" href="https://i.dont.works/nginx-mtls-example/">Read More</a>
+    <div class="post-author">
+                <a class="post-author-link" href="https://i.dont.works/author/narate/">
+                    <img class="post-author-image" src="./Kong API Gateway ฉบับรวบรัด_files/d19bf157763983ec3036cf25590321d4.jpeg" alt="นเรศ เก็จรัมย์">
+                </a>
+    </div>
+</footer></article>            </div>
+        </section></div></div>
+        <div class="sidebar-column col-lg-3 hidden-xs hidden-sm hidden-md" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+                    <div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none; top: 0px; left: 947.5px;"><aside class="widget-area">
+        <div class="widget widget-tags u-shadow">
+    <h4 class="widget-title">Tags</h4>
+        <div class="tag-feed">
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/api-gateway/">
+                        <span class="tag-name">API Gateway</span>
+                        <span class="tag-count">5</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/krakend/">
+                        <span class="tag-name">KrakenD</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/mongodb/">
+                        <span class="tag-name">MongoDB</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/nginx/">
+                        <span class="tag-name">Nginx</span>
+                        <span class="tag-count">5</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/postgresql/">
+                        <span class="tag-name">PostgreSQL</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/api/">
+                        <span class="tag-name">api</span>
+                        <span class="tag-count">3</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/bash/">
+                        <span class="tag-name">bash</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/chmod/">
+                        <span class="tag-name">chmod</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/cluster/">
+                        <span class="tag-name">cluster</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/command-line/">
+                        <span class="tag-name">command line</span>
+                        <span class="tag-count">2</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/csv/">
+                        <span class="tag-name">csv</span>
+                        <span class="tag-count">2</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/database/">
+                        <span class="tag-name">database</span>
+                        <span class="tag-count">2</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/docker/">
+                        <span class="tag-name">docker</span>
+                        <span class="tag-count">4</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/docs/">
+                        <span class="tag-name">docs</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/excel/">
+                        <span class="tag-name">excel</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/https/">
+                        <span class="tag-name">https</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/injection/">
+                        <span class="tag-name">injection</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/javascript/">
+                        <span class="tag-name">javascript</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/jupyter/">
+                        <span class="tag-name">jupyter</span>
+                        <span class="tag-count">2</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/kong/">
+                        <span class="tag-name">kong</span>
+                        <span class="tag-count">6</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/linux/">
+                        <span class="tag-name">linux</span>
+                        <span class="tag-count">3</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/mariadb/">
+                        <span class="tag-name">mariadb</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/markdown/">
+                        <span class="tag-name">markdown</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/nodejs/">
+                        <span class="tag-name">nodejs</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/owasp/">
+                        <span class="tag-name">owasp</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/python/">
+                        <span class="tag-name">python</span>
+                        <span class="tag-count">3</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/r/">
+                        <span class="tag-name">r</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/ruby/">
+                        <span class="tag-name">ruby</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/security/">
+                        <span class="tag-name">security</span>
+                        <span class="tag-count">4</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/ssl/">
+                        <span class="tag-name">ssl</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/tools/">
+                        <span class="tag-name">tools</span>
+                        <span class="tag-count">4</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/yaml/">
+                        <span class="tag-name">yaml</span>
+                        <span class="tag-count">4</span>
+                    </a>
+                </div>
+        </div>
+</div>    <div class="widget widget-recent u-shadow">
+    <h4 class="widget-title">Recent Posts</h4>
+            <div class="recent-posts">
+                    <article class="recent">
+                        <header class="post-header">
+    <h5 class="post-title">
+            <a class="post-title-link" href="https://i.dont.works/create-user-pass-db-in-pg-docker/">สร้าง User / Password / Database เพิ่มใน PostgreSQL ที่รันอยู่ใน Docker container</a>
+    </h5>
+        <time class="post-date" datetime="2021-01-25">
+    Jan 25, 2021
+</time></header>                    </article>
+                    <article class="recent">
+                        <header class="post-header">
+    <h5 class="post-title">
+            <a class="post-title-link" href="https://i.dont.works/kong-http-log/">Kong HTTP Log</a>
+    </h5>
+        <time class="post-date" datetime="2020-07-20">
+    Jul 20, 2020
+</time></header>                    </article>
+                    <article class="recent">
+                        <header class="post-header">
+    <h5 class="post-title">
+            <a class="post-title-link" href="https://i.dont.works/nginx-configuration-template/">Nginx Configuration template</a>
+    </h5>
+        <time class="post-date" datetime="2020-05-14">
+    May 14, 2020
+</time></header>                    </article>
+            </div>
+</div></aside></div></div>
+    </div>
+</div>
+        </div>
+        <footer class="site-footer">
+    <div class="container">
+        <div class="footer-inner">
+            <div class="social">
+                    <a class="social-item social-item-facebook" href="https://www.facebook.com/code.hard.fap.harder" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                        <i class="icon icon-facebook"></i>
+                    </a>
+                <a class="social-item social-item-rss" href="https://feedly.com/i/subscription/feed/https://i.dont.works/rss/" target="_blank" rel="noopener noreferrer" aria-label="RSS">
+                    <i class="icon icon-rss"></i>
+                </a>
+            </div>
+            <div class="copyright">
+                Powered by <a href="https://ghost.org/" target="_blank">Ghost</a>
+            </div>
+        </div>
+    </div>
+</footer>    </div>
+
+    <div class="dimmer"></div>
+<div class="off-canvas">
+    <div class="burger burger-close hidden-lg hidden-xl">
+    <div class="burger-bar"></div>
+    <div class="burger-bar"></div>
+</div>    <div class="mobile-menu">
+        <ul class="nav-list u-plain-list">
+        <li class="menu-item menu-item-home">
+            <a class="menu-item-link" href="https://i.dont.works/">Home</a>
+        </li>
+        <li class="menu-item menu-item-about">
+            <a class="menu-item-link" href="https://i.dont.works/about-me/">About</a>
+        </li>
+        <li class="menu-item menu-item-contact">
+            <a class="menu-item-link" href="https://i.dont.works/contact/">Contact</a>
+        </li>
+        <li class="menu-item menu-item-donate">
+            <a class="menu-item-link" href="https://i.dont.works/donate/">Donate</a>
+        </li>
+        <li class="menu-item menu-item-ring">
+            <a class="menu-item-link" href="https://webring.wonderful.software/#/dont.works">Ring</a>
+        </li>
+</ul>
+    </div>
+            <section class="related-posts">
+            <h3 class="related-title">
+                <span class="text">You might also like...</span>
+            </h3>
+            <div class="post-feed">
+                    <article class="post tag-tools tag-python tag-api tag-docs tag-ruby tag-javascript tag-yaml tag-markdown tag-nodejs featured u-shadow">
+        <img class="post-image lazyload u-object-fit" data-src="https://images.unsplash.com/photo-1486303954368-398fea0e72cd?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;s=00d0e9cfad3ba3ec18cc8eba78044787" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-sizes="auto" alt="รีวิว API Docฯ Genฯ แบบลวกๆ เร็วกว่าต้มมาม่า">
+        <div class="post-media">
+        <div class="u-placeholder same-height rectangle">
+            <a class="post-image-link" href="https://i.dont.works/quick-review-api-docs-gen/">
+                <img class="post-image lazyload u-object-fit" data-srcset="https://images.unsplash.com/photo-1486303954368-398fea0e72cd?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;s=00d0e9cfad3ba3ec18cc8eba78044787 400w, https://images.unsplash.com/photo-1486303954368-398fea0e72cd?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;s=00d0e9cfad3ba3ec18cc8eba78044787 750w, https://images.unsplash.com/photo-1486303954368-398fea0e72cd?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;s=00d0e9cfad3ba3ec18cc8eba78044787 960w" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-sizes="auto" alt="รีวิว API Docฯ Genฯ แบบลวกๆ เร็วกว่าต้มมาม่า">
+            </a>
+        </div>
+    </div>
+    <div class="post-wrapper">
+        <header class="post-header">
+            <a class="post-tag" href="https://i.dont.works/tag/tools/">tools</a>
+    <h2 class="post-title">
+            <a class="post-title-link" href="https://i.dont.works/quick-review-api-docs-gen/">รีวิว API Docฯ Genฯ แบบลวกๆ เร็วกว่าต้มมาม่า</a>
+    </h2>
+</header>            <div class="post-excerpt">
+                สั้นๆ จบย่อหน้าเดียว ลูกพี่สั่ง ให้เขี
+            </div>
+    </div>
+    <footer class="post-footer">
+    <a class="post-link" href="https://i.dont.works/quick-review-api-docs-gen/">Read More</a>
+    <div class="post-author">
+                <a class="post-author-link" href="https://i.dont.works/author/narate/">
+                    <img class="post-author-image" src="./Kong API Gateway ฉบับรวบรัด_files/d19bf157763983ec3036cf25590321d4.jpeg" alt="นเรศ เก็จรัมย์">
+                </a>
+    </div>
+</footer></article>                    <article class="post tag-api-gateway tag-krakend tag-yaml tag-kong tag-docker u-shadow">
+        <div class="post-media">
+        <div class="u-placeholder same-height rectangle">
+            <a class="post-image-link" href="https://i.dont.works/basic-krakend-api-gateway/">
+                <img class="post-image lazyload u-object-fit" data-srcset="/content/images/size/w400/2019/07/IMG_20190707_205416-copy.jpg 400w, /content/images/size/w750/2019/07/IMG_20190707_205416-copy.jpg 750w, /content/images/size/w960/2019/07/IMG_20190707_205416-copy.jpg 960w" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-sizes="auto" alt="ใครไม่ดี KrakenD API Gateway">
+            </a>
+        </div>
+    </div>
+    <div class="post-wrapper">
+        <header class="post-header">
+            <a class="post-tag" href="https://i.dont.works/tag/api-gateway/">API Gateway</a>
+    <h2 class="post-title">
+            <a class="post-title-link" href="https://i.dont.works/basic-krakend-api-gateway/">ใครไม่ดี KrakenD API Gateway</a>
+    </h2>
+</header>            <div class="post-excerpt">
+                เมื่อสัก 2 วันก่อน ผมเห็น KrakenD จากน้องคนนึ
+            </div>
+    </div>
+    <footer class="post-footer">
+    <a class="post-link" href="https://i.dont.works/basic-krakend-api-gateway/">Read More</a>
+    <div class="post-author">
+                <a class="post-author-link" href="https://i.dont.works/author/narate/">
+                    <img class="post-author-image" src="./Kong API Gateway ฉบับรวบรัด_files/d19bf157763983ec3036cf25590321d4.jpeg" alt="นเรศ เก็จรัมย์">
+                </a>
+    </div>
+</footer></article>                    <article class="post tag-nginx tag-security tag-ssl tag-https u-shadow">
+        <div class="post-media">
+        <div class="u-placeholder same-height rectangle">
+            <a class="post-image-link" href="https://i.dont.works/nginx-mtls-example/">
+                <img class="post-image lazyload u-object-fit" data-srcset="/content/images/size/w400/2019/09/handshake-1.gif 400w, /content/images/size/w750/2019/09/handshake-1.gif 750w, /content/images/size/w960/2019/09/handshake-1.gif 960w" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-sizes="auto" alt="ตัวอย่าง NGINX mutual authentication">
+            </a>
+        </div>
+    </div>
+    <div class="post-wrapper">
+        <header class="post-header">
+            <a class="post-tag" href="https://i.dont.works/tag/nginx/">Nginx</a>
+    <h2 class="post-title">
+            <a class="post-title-link" href="https://i.dont.works/nginx-mtls-example/">ตัวอย่าง NGINX mutual authentication</a>
+    </h2>
+</header>            <div class="post-excerpt">
+                การทำ &nbsp;Mutual authentication พูดง่ายๆคือ คนที่จะเรียกใช้เว็บ
+            </div>
+    </div>
+    <footer class="post-footer">
+    <a class="post-link" href="https://i.dont.works/nginx-mtls-example/">Read More</a>
+    <div class="post-author">
+                <a class="post-author-link" href="https://i.dont.works/author/narate/">
+                    <img class="post-author-image" src="./Kong API Gateway ฉบับรวบรัด_files/d19bf157763983ec3036cf25590321d4.jpeg" alt="นเรศ เก็จรัมย์">
+                </a>
+    </div>
+</footer></article>            </div>
+        </section>
+    <aside class="widget-area">
+        <div class="widget widget-tags u-shadow">
+    <h4 class="widget-title">Tags</h4>
+        <div class="tag-feed">
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/api-gateway/">
+                        <span class="tag-name">API Gateway</span>
+                        <span class="tag-count">5</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/krakend/">
+                        <span class="tag-name">KrakenD</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/mongodb/">
+                        <span class="tag-name">MongoDB</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/nginx/">
+                        <span class="tag-name">Nginx</span>
+                        <span class="tag-count">5</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/postgresql/">
+                        <span class="tag-name">PostgreSQL</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/api/">
+                        <span class="tag-name">api</span>
+                        <span class="tag-count">3</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/bash/">
+                        <span class="tag-name">bash</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/chmod/">
+                        <span class="tag-name">chmod</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/cluster/">
+                        <span class="tag-name">cluster</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/command-line/">
+                        <span class="tag-name">command line</span>
+                        <span class="tag-count">2</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/csv/">
+                        <span class="tag-name">csv</span>
+                        <span class="tag-count">2</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/database/">
+                        <span class="tag-name">database</span>
+                        <span class="tag-count">2</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/docker/">
+                        <span class="tag-name">docker</span>
+                        <span class="tag-count">4</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/docs/">
+                        <span class="tag-name">docs</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/excel/">
+                        <span class="tag-name">excel</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/https/">
+                        <span class="tag-name">https</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/injection/">
+                        <span class="tag-name">injection</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/javascript/">
+                        <span class="tag-name">javascript</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/jupyter/">
+                        <span class="tag-name">jupyter</span>
+                        <span class="tag-count">2</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/kong/">
+                        <span class="tag-name">kong</span>
+                        <span class="tag-count">6</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/linux/">
+                        <span class="tag-name">linux</span>
+                        <span class="tag-count">3</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/mariadb/">
+                        <span class="tag-name">mariadb</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/markdown/">
+                        <span class="tag-name">markdown</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/nodejs/">
+                        <span class="tag-name">nodejs</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/owasp/">
+                        <span class="tag-name">owasp</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/python/">
+                        <span class="tag-name">python</span>
+                        <span class="tag-count">3</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/r/">
+                        <span class="tag-name">r</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/ruby/">
+                        <span class="tag-name">ruby</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/security/">
+                        <span class="tag-name">security</span>
+                        <span class="tag-count">4</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/ssl/">
+                        <span class="tag-name">ssl</span>
+                        <span class="tag-count">1</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/tools/">
+                        <span class="tag-name">tools</span>
+                        <span class="tag-count">4</span>
+                    </a>
+                </div>
+                <div class="tag">
+                    <a class="tag-link" href="https://i.dont.works/tag/yaml/">
+                        <span class="tag-name">yaml</span>
+                        <span class="tag-count">4</span>
+                    </a>
+                </div>
+        </div>
+</div>    <div class="widget widget-recent u-shadow">
+    <h4 class="widget-title">Recent Posts</h4>
+            <div class="recent-posts">
+                    <article class="recent">
+                        <header class="post-header">
+    <h5 class="post-title">
+            <a class="post-title-link" href="https://i.dont.works/create-user-pass-db-in-pg-docker/">สร้าง User / Password / Database เพิ่มใน PostgreSQL ที่รันอยู่ใน Docker container</a>
+    </h5>
+        <time class="post-date" datetime="2021-01-25">
+    Jan 25, 2021
+</time></header>                    </article>
+                    <article class="recent">
+                        <header class="post-header">
+    <h5 class="post-title">
+            <a class="post-title-link" href="https://i.dont.works/kong-http-log/">Kong HTTP Log</a>
+    </h5>
+        <time class="post-date" datetime="2020-07-20">
+    Jul 20, 2020
+</time></header>                    </article>
+                    <article class="recent">
+                        <header class="post-header">
+    <h5 class="post-title">
+            <a class="post-title-link" href="https://i.dont.works/nginx-configuration-template/">Nginx Configuration template</a>
+    </h5>
+        <time class="post-date" datetime="2020-05-14">
+    May 14, 2020
+</time></header>                    </article>
+            </div>
+</div></aside></div>    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe.
+        It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides.
+          PhotoSwipe keeps only 3 of them in the DOM to save memory.
+          Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script src="./Kong API Gateway ฉบับรวบรัด_files/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous">
+        </script>
+    <script src="./Kong API Gateway ฉบับรวบรัด_files/main.min.js"></script>
+
+    <div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; width: 0px; height: 0px;"><div></div></div></div>
+<script async="" defer="" crossorigin="anonymous" src="./Kong API Gateway ฉบับรวบรัด_files/sdk(1).js"></script>
+    
+
+    <script type="text/javascript">
+	new ShowYourTerms('.showyourterms');
+</script>
+
+
+</body></html>
